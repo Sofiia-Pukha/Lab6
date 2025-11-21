@@ -42,6 +42,7 @@ struct Task
     void await_suspend(coroutine_handle<> caller) 
     {
         coro_handle.resume();
+        caller.resume();
     }
 
     void await_resume() {}
