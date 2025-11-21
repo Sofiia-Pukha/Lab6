@@ -24,7 +24,7 @@ struct Task
     }
         
         
-        suspend_always initial_suspend() { return {};}
+        suspend_always initial_suspend() { return {}; }
         
         
         suspend_always final_suspend() noexcept { return {}; }
@@ -60,11 +60,36 @@ Task CoroutineB(int number)
     co_return;
 }
 
+Task MainGenerator(int count) 
+{
+    cout << "Start generating sequence..." << endl;
+
+    for (int i = 0; i < count; ++i) 
+    {
+        int num = rand() % 256 + 1;
+        cout << "Generated: " << num << " -> ";
+
+        if (num % 2 == 0) 
+        {
+            co_await CoroutineA(num);
+        } 
+        else 
+        {
+            co_await CoroutineB(num);
+        }
+    }
+    cout << "Generation finished." << endl;
+    co_return;
+}
+
 int main() 
 {
     srand(time(0));
+    Task app = MainGenerator(10);
     
-    cout << "Laboratory work started..." << endl;
-    
+    if (app.coro_handle) 
+    {
+        app.coro_handle.resume();
+    }
     return 0;
 }
