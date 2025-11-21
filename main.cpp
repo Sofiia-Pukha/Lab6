@@ -47,6 +47,19 @@ struct Task
     void await_resume() {}
 };
 
+Task CoroutineA(int number) 
+{
+    cout << "[Coroutine A] Even number: " << number << endl;
+    co_return;
+}
+
+Task CoroutineB(int number) 
+{
+    int square = number * number;
+    cout << "[Coroutine B] Odd number(squared): " << square << endl;
+    co_return;
+}
+
 int main() 
 {
     srand(time(0));
